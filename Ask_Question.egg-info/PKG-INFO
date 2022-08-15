@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: ask-question
-Version: 1.0.0
+Version: 1.1.0
 Summary: A module simplifie the boiling process when asking the user a question via TTY.
 Home-page: https://github.com/Hanra-s-work/ask_question
 Author: Henry Letellier

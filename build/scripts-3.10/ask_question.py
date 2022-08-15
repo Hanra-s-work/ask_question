@@ -12,7 +12,7 @@ This module is provided as if and without any warranty
 Crediting the author is appreciated.
 """
 
-__Version__ = "1.0.0"
+__Version__ = "1.1.0"
 __Author__ = "(c) Henry Letellier"
 
 from string import printable

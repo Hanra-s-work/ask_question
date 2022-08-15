@@ -224,5 +224,5 @@ An easy way to display the version is:
 
 ```py
 import ask_question as aq
-aq.__Version__
+print(f"Version : {aq.__Version__}")
 ```
