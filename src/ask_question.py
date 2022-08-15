@@ -8,17 +8,22 @@
 """
 The file containing the code to speed up the boiling
 process that occurs when a question is asked.
+This module is provided as if and without any warranty
+Crediting the author is appreciated.
 """
 
 __Version__ = "1.0.0"
-__Author__ = "Henry Letellier"
+__Author__ = "(c) Henry Letellier"
 
 from string import printable
 class AskQuestion:
     """ An advanced function that contains boiling to gain time when asking a question """
     def __init__(self, human_type:dict={}, illegal_characters_nb:str="") -> None:
+        """ The globals for the class """
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
+        self.author = "(c) Henry Letellier"
+        self.version = "1.0.0"
         self.check_load()
 
     def check_load(self) -> None:
@@ -170,5 +175,5 @@ if __name__ == "__main__":
     ADD_S = ""
     if answer > 1:
         ADD_S = "s"
-    print(f"You are {answer} year{ADD_S}")
+    print(f"You are {answer} year{ADD_S} old")
     AQI.pause()
