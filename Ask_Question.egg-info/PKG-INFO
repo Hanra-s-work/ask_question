@@ -1,0 +1,16 @@
+Metadata-Version: 2.1
+Name: ask-question
+Version: 1.0.0
+Summary: A module simplifie the boiling process when asking the user a question via TTY.
+Home-page: https://github.com/Hanra-s-work/ask_question
+Author: Henry Letellier
+Author-email: henrysoftwarehouse@protonmail.com
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: THE UNLICENSED
+Classifier: Operating System :: OS Independent
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# ask_question
+
+This is a python package I created in order to simplify the boiling process when asking the user a question via TTY.
