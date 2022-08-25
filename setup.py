@@ -9,7 +9,7 @@ setuptools.setup(
     scripts=['src/ask_question.py'] ,
     author="Henry Letellier",
     author_email="henrysoftwarehouse@protonmail.com",
-    description="A module simplifie the boiling process when asking the user a question via TTY.",
+    description="A module that simplifies the boiling process when asking the user a question via a TTY interface.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Hanra-s-work/ask_question",
