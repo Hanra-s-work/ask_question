@@ -1,8 +1,8 @@
 ##
-## EPITECH PROJECT, 2022
-## Desktop_pet (Workspace)
-## File description:
-## ask_question.py
+# EPITECH PROJECT, 2022
+# Desktop_pet (Workspace)
+# File description:
+# ask_question.py
 ##
 
 """
@@ -16,9 +16,12 @@ __Version__ = "1.1.0"
 __Author__ = "(c) Henry Letellier"
 
 from string import printable
+
+
 class AskQuestion:
     """ An advanced function that contains boiling to gain time when asking a question """
-    def __init__(self, human_type:dict={}, illegal_characters_nb:str="") -> None:
+
+    def __init__(self, human_type: dict = {}, illegal_characters_nb: str = "") -> None:
         """ The globals for the class """
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
@@ -30,35 +33,38 @@ class AskQuestion:
         """ Check that the ressources are present """
         if self.human_type == dict():
             self.human_type = {
-            "int":"whole number (-1, 0, 1, 2, 3, etc...)",
-            "float":"floating number (-1.2, 0.1, 1.2, etc...)",
-            "uint":"whole positive number (0, 1, 2, etc...)",
-            "ufloat":"whole positive floating number (0.1, 1.2, etc ...)",
-            "num":"numeric (numbers from 0 onwards)",
-            "alnum":"alphanumeric (only numbers and the alphabet)",
-            "isalpha":"alphabet (from a to z and A to Z)",
-            "char":"alphabet (from a to z and A to Z)",
-            "ascii":"ascii Table",
-            "str":"string (any character you can type)",
-            "version":"version (numbers seperated by '.' characters)",
-            "ver":"version (numbers seperated by '.' characters)",
-            "bool":"boolean (yes/True/1 or no/False/0 answer type)",
+                "int": "whole number (-1, 0, 1, 2, 3, etc...)",
+                "float": "floating number (-1.2, 0.1, 1.2, etc...)",
+                "uint": "whole positive number (0, 1, 2, etc...)",
+                "ufloat": "whole positive floating number (0.1, 1.2, etc ...)",
+                "num": "numeric (numbers from 0 onwards)",
+                "alnum": "alphanumeric (only numbers and the alphabet)",
+                "isalpha": "alphabet (from a to z and A to Z)",
+                "char": "alphabet (from a to z and A to Z)",
+                "ascii": "ascii Table",
+                "str": "string (any character you can type)",
+                "version": "version (numbers seperated by '.' characters)",
+                "ver": "version (numbers seperated by '.' characters)",
+                "bool": "boolean (yes/True/1 or no/False/0 answer type)",
             }
         if self.illegal_characters_nb == "":
             self.illegal_characters_nb = printable.replace("-", "")
-            self.illegal_characters_nb = self.illegal_characters_nb.replace(".", "")
-            self.illegal_characters_nb = self.illegal_characters_nb.replace(",","")
-            self.illegal_characters_nb = self.illegal_characters_nb.replace("+","")
-            self.illegal_characters_nb = self.illegal_characters_nb.replace("0123456789","")
+            self.illegal_characters_nb = self.illegal_characters_nb.replace(
+                ".", "")
+            self.illegal_characters_nb = self.illegal_characters_nb.replace(
+                ",", "")
+            self.illegal_characters_nb = self.illegal_characters_nb.replace(
+                "+", "")
+            self.illegal_characters_nb = self.illegal_characters_nb.replace(
+                "0123456789", "")
 
-
-    def is_empty(self, string:str) -> bool:
+    def is_empty(self, string: str) -> bool:
         """ Check if the string is not empty """
         if len(string) == 0:
             return True
         return False
 
-    def is_version(self, string:str) -> bool:
+    def is_version(self, string: str) -> bool:
         """ Check if the given string is a version """
         string_length = len(string)-1
         for i in enumerate(string):
@@ -69,51 +75,52 @@ class AskQuestion:
                     return False
         return True
 
-    def contains_illegal_characters(self, string:str, illegal_characters:str) -> bool:
+    def contains_illegal_characters(self, string: str, illegal_characters: str) -> bool:
         """ Check if there are no forbidden characters in a string destined to be converted to a number """
         for i in string:
             if i in illegal_characters:
                 return True
         return False
 
-    def remove_char_overflow(self, string:str, char:str, presence_tolerance:int=1, case_sensitive:bool=False) -> str:
+    def remove_char_overflow(self, string: str, char: str, presence_tolerance: int = 1, case_sensitive: bool = False) -> str:
         """ Remove the number of times a specific character appears in a string after the allowed number of times """
         result = ""
         for i in string:
             if case_sensitive == False:
                 if i.lower() == char:
                     if presence_tolerance > 0:
-                        result+=i
-                        presence_tolerance-=1
+                        result += i
+                        presence_tolerance -= 1
                 else:
-                    result+=i
+                    result += i
             else:
                 if i == char:
                     if presence_tolerance > 0:
-                        result+=i
-                        presence_tolerance-=1
+                        result += i
+                        presence_tolerance -= 1
                 else:
-                    result+=i
+                    result += i
         return result
 
-    def clean_number(self, string:str, char:str=".", tolerance:int=1, case_sensitive:bool=False) -> str:
+    def clean_number(self, string: str, char: str = ".", tolerance: int = 1, case_sensitive: bool = False) -> str:
         """ Remove content that should not be in a number input """
         if " " in string:
             string = string.replace(" ", "")
         if "," in string:
-            string = string.replace(",",".")
+            string = string.replace(",", ".")
         if string.count(char) > tolerance:
-            string = self.remove_char_overflow(string, char, tolerance, case_sensitive)
+            string = self.remove_char_overflow(
+                string, char, tolerance, case_sensitive)
         return string
 
-
-    def ask_question(self, question:str, answer_type:str) -> (str or int or float):
+    def ask_question(self, question: str, answer_type: str) -> (str or int or float):
         """ Ask a question and continue asking until type met """
         answer_found = False
         while answer_found == False:
             answer = input(str(question))
             if self.is_empty(answer) == False and answer.isspace() == False and answer.isprintable() == True:
-                contains_illegal_characters = self.contains_illegal_characters(answer, self.illegal_characters_nb)
+                contains_illegal_characters = self.contains_illegal_characters(
+                    answer, self.illegal_characters_nb)
                 if answer.isalnum() == True and "alnum" in answer_type:
                     return answer
                 if answer.isalpha() == True and "char" in answer_type:
@@ -160,14 +167,20 @@ class AskQuestion:
                         continue
                     except BaseException:
                         continue
-                print(f"Please enter a response of type '{self.human_type[answer_type]}'")
+                print(
+                    f"Please enter a response of type '{self.human_type[answer_type]}'"
+                )
             else:
-                print("Response must not be empty or only contain spaces or any non visible character.")
-    def pause(self, pause_message:str="Press enter to continue...") -> None:
+                print(
+                    "Response must not be empty or only contain spaces or any non visible character."
+                )
+
+    def pause(self, pause_message: str = "Press enter to continue...") -> None:
         """ Act like the windows batch pause function """
-        empty=""
+        empty = ""
         pause_response = input(pause_message)
-        empty+=pause_response
+        empty += pause_response
+
 
 if __name__ == "__main__":
     AQI = AskQuestion(dict(), "")

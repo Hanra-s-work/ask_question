@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name='ask-question',  
-    version='1.1.0',
+    version='1.2.0',
     scripts=['src/ask_question.py'] ,
     author="Henry Letellier",
     author_email="henrysoftwarehouse@protonmail.com",
