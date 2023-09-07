@@ -27,6 +27,9 @@ class AskQuestion:
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
         self.version = "1.0.0"
+        self.usr_answer = ""
+        self.answer_was_found = True
+        self.answer_was_not_found = True
         self.check_load()
 
     def check_load(self) -> None:
@@ -113,67 +116,93 @@ class AskQuestion:
                 string, char, tolerance, case_sensitive)
         return string
 
-    def ask_question(self, question: str, answer_type: str) -> (str or int or float):
+    def test_input(self, input_answer:str, answer_type:str) -> (str or int or float or bool):
+        """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
+        if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
+            contains_illegal_characters = self.contains_illegal_characters(
+                input_answer, self.illegal_characters_nb)
+            if input_answer.isalnum() is True and "alnum" in answer_type:
+                self.usr_answer = input_answer
+                return self.answer_was_found
+            if input_answer.isalpha() is True and "char" in answer_type:
+                self.usr_answer = input_answer
+                return self.answer_was_found
+            if input_answer.isdigit() is True and "num" in answer_type:
+                self.usr_answer = float(input_answer)
+                return self.answer_was_found
+            if input_answer.isascii() is True and ("ascii" in answer_type or "str" in answer_type):
+                self.usr_answer = input_answer
+                return self.answer_was_found
+            if "up" in answer_type:
+                self.usr_answer = input_answer.upper()
+                return self.answer_was_found
+            if "low" in answer_type or "down" in answer_type:
+                self.usr_answer = input_answer.lower()
+                return self.answer_was_found
+            if "version" in answer_type or "ver" in answer_type and self.is_version(input_answer) is True:
+                self.usr_answer = input_answer
+                return self.answer_was_found
+            if "uint" in answer_type and input_answer.isdigit() is True:
+                self.usr_answer = int(self.clean_number(input_answer, ".", 0, False))
+                return self.answer_was_found
+            if "ufloat" in answer_type and input_answer.isdigit() is True:
+                self.usr_answer = float(self.clean_number(input_answer, ".", 1, False))
+                return self.answer_was_found
+            if "bool" in answer_type:
+                answer_l = input_answer.lower()
+                if "y" in answer_l or "t" in answer_l or "1" in answer_l:
+                    self.usr_answer = True
+                    return self.answer_was_found
+                elif "n" in answer_l or "f" in answer_l or "0" in answer_l:
+                    self.usr_answer = False
+                    return self.answer_was_found
+                else:
+                    self.usr_answer = None
+                    return self.answer_was_not_found
+            if "int" in answer_type and "uint" not in answer_type and contains_illegal_characters is False:
+                input_answer = self.clean_number(input_answer, ".", 0, False)
+                input_answer = self.remove_char_overflow(input_answer, "-", 1, False)
+                try:
+                    self.usr_answer = int(input_answer)
+                    return self.answer_was_found
+                except TypeError:
+                    self.usr_answer = ""
+                    return self.answer_was_not_found
+                except BaseException:
+                    self.usr_answer = ""
+                    return self.answer_was_not_found
+            if "float" in answer_type and "ufloat" not in answer_type and contains_illegal_characters is False:
+                input_answer = self.clean_number(input_answer, ".", 0, False)
+                input_answer = self.remove_char_overflow(input_answer, "-", 1, False)
+                try:
+                    self.usr_answer = float(input_answer)
+                    return self.answer_was_found
+                except TypeError:
+                    self.usr_answer = ""
+                    return self.answer_was_not_found
+                except BaseException:
+                    self.usr_answer = input_answer
+                    return self.answer_was_not_found
+            print(
+                f"Please enter a response of type '{self.human_type[answer_type]}'"
+            )
+            self.usr_answer = ""
+            return self.answer_was_not_found
+        print(
+            "Response must not be empty or only contain spaces or any non visible character."
+        )
+        self.usr_answer = ""
+        return self.answer_was_not_found
+
+    def ask_question(self, question: str, answer_type: str) -> (str or int or float or bool):
         """ Ask a question and continue asking until type met """
         answer_found = False
+        usr_answer = ""
+        self.usr_answer = ""
         while answer_found == False:
-            answer = input(str(question))
-            if self.is_empty(answer) == False and answer.isspace() == False and answer.isprintable() == True:
-                contains_illegal_characters = self.contains_illegal_characters(
-                    answer, self.illegal_characters_nb)
-                if answer.isalnum() == True and "alnum" in answer_type:
-                    return answer
-                if answer.isalpha() == True and "char" in answer_type:
-                    return answer
-                if answer.isdigit() == True and "num" in answer_type:
-                    return float(answer)
-                if answer.isascii() == True and ("ascii" in answer_type or "str" in answer_type):
-                    return answer
-                if "up" in answer_type:
-                    return answer.upper()
-                if "low" in answer_type or "down" in answer_type:
-                    return answer.lower()
-                if "version" in answer_type or "ver" in answer_type and self.is_version(answer) == True:
-                    return answer
-                if "uint" in answer_type and answer.isdigit() == True:
-                    answer = self.clean_number(answer, ".", 0, False)
-                    return int(answer)
-                if "ufloat" in answer_type and answer.isdigit() == True:
-                    answer = self.clean_number(answer, ".", 1, False)
-                    return float(answer)
-                if "bool" in answer_type:
-                    answer_l = answer.lower()
-                    if "y" in answer_l or "t" in answer_l or "1" in answer_l:
-                        return True
-                    elif "n" in answer_l or "f" in answer_l or "0" in answer_l:
-                        return False
-                    else:
-                        answer_l = None
-                if "int" in answer_type and "uint" not in answer_type and contains_illegal_characters == False:
-                    answer = self.clean_number(answer, ".", 0, False)
-                    answer = self.remove_char_overflow(answer, "-", 1, False)
-                    try:
-                        return int(answer)
-                    except TypeError:
-                        continue
-                    except BaseException:
-                        continue
-                if "float" in answer_type and "ufloat" not in answer_type and contains_illegal_characters == False:
-                    answer = self.clean_number(answer, ".", 0, False)
-                    answer = self.remove_char_overflow(answer, "-", 1, False)
-                    try:
-                        return float(answer)
-                    except TypeError:
-                        continue
-                    except BaseException:
-                        continue
-                print(
-                    f"Please enter a response of type '{self.human_type[answer_type]}'"
-                )
-            else:
-                print(
-                    "Response must not be empty or only contain spaces or any non visible character."
-                )
+            usr_answer = input(str(question))
+            answer_found = self.test_input(usr_answer, answer_type)
+        return self.usr_answer
 
     def pause(self, pause_message: str = "Press enter to continue...") -> None:
         """ Act like the windows batch pause function """

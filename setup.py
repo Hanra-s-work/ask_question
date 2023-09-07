@@ -1,19 +1,20 @@
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="utf-8", newline="\n") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='ask-question',  
+    name='ask-question',
     version='1.2.0',
-    scripts=['src/ask_question.py'] ,
+    packages=setuptools.find_packages(),
+    install_requires=[
+    ],
     author="Henry Letellier",
     author_email="henrysoftwarehouse@protonmail.com",
     description="A module that simplifies the boiling process when asking the user a question via a TTY interface.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Hanra-s-work/ask_question",
-    packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
