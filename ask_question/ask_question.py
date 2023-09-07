@@ -29,7 +29,7 @@ class AskQuestion:
         self.version = "1.0.0"
         self.usr_answer = ""
         self.answer_was_found = True
-        self.answer_was_not_found = True
+        self.answer_was_not_found = False
         self.check_load()
 
     def check_load(self) -> None:
@@ -71,12 +71,20 @@ class AskQuestion:
         """ Check if the given string is a version """
         string_length = len(string)-1
         for i in enumerate(string):
-            if i[1].isdigit() == False:
+            if i[1].isdigit() is False:
                 if i[0] == string_length and (i[1] == '.' or i[1] == ','):
                     return False
                 if i[1] != "." and i[1] != ",":
                     return False
         return True
+
+    def is_float(self, nb: str) -> bool:
+        """ Check if the given string is a float """
+        try:
+            float(nb)
+            return True
+        except ValueError:
+            return False
 
     def contains_illegal_characters(self, string: str, illegal_characters: str) -> bool:
         """ Check if there are no forbidden characters in a string destined to be converted to a number """
@@ -89,7 +97,7 @@ class AskQuestion:
         """ Remove the number of times a specific character appears in a string after the allowed number of times """
         result = ""
         for i in string:
-            if case_sensitive == False:
+            if case_sensitive is False:
                 if i.lower() == char:
                     if presence_tolerance > 0:
                         result += i
@@ -116,11 +124,13 @@ class AskQuestion:
                 string, char, tolerance, case_sensitive)
         return string
 
-    def test_input(self, input_answer:str, answer_type:str) -> (str or int or float or bool):
+    def test_input(self, input_answer: str, answer_type: str) -> (str or int or float or bool):
         """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
         if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
             contains_illegal_characters = self.contains_illegal_characters(
-                input_answer, self.illegal_characters_nb)
+                input_answer,
+                self.illegal_characters_nb
+            )
             if input_answer.isalnum() is True and "alnum" in answer_type:
                 self.usr_answer = input_answer
                 return self.answer_was_found
@@ -143,25 +153,31 @@ class AskQuestion:
                 self.usr_answer = input_answer
                 return self.answer_was_found
             if "uint" in answer_type and input_answer.isdigit() is True:
-                self.usr_answer = int(self.clean_number(input_answer, ".", 0, False))
+                self.usr_answer = int(self.clean_number(
+                    input_answer, ".", 0, False))
                 return self.answer_was_found
-            if "ufloat" in answer_type and input_answer.isdigit() is True:
-                self.usr_answer = float(self.clean_number(input_answer, ".", 1, False))
+            if "ufloat" in answer_type and contains_illegal_characters is False:
+                if input_answer[0] == "-":
+                    self.usr_answer = ""
+                    return self.answer_was_not_found
+                self.usr_answer = float(
+                    self.clean_number(input_answer, ".", 1, False)
+                )
                 return self.answer_was_found
             if "bool" in answer_type:
                 answer_l = input_answer.lower()
                 if "y" in answer_l or "t" in answer_l or "1" in answer_l:
                     self.usr_answer = True
                     return self.answer_was_found
-                elif "n" in answer_l or "f" in answer_l or "0" in answer_l:
+                if "n" in answer_l or "f" in answer_l or "0" in answer_l:
                     self.usr_answer = False
                     return self.answer_was_found
-                else:
-                    self.usr_answer = None
-                    return self.answer_was_not_found
+                self.usr_answer = None
+                return self.answer_was_not_found
             if "int" in answer_type and "uint" not in answer_type and contains_illegal_characters is False:
                 input_answer = self.clean_number(input_answer, ".", 0, False)
-                input_answer = self.remove_char_overflow(input_answer, "-", 1, False)
+                input_answer = self.remove_char_overflow(
+                    input_answer, "-", 1, False)
                 try:
                     self.usr_answer = int(input_answer)
                     return self.answer_was_found
@@ -172,8 +188,13 @@ class AskQuestion:
                     self.usr_answer = ""
                     return self.answer_was_not_found
             if "float" in answer_type and "ufloat" not in answer_type and contains_illegal_characters is False:
-                input_answer = self.clean_number(input_answer, ".", 0, False)
-                input_answer = self.remove_char_overflow(input_answer, "-", 1, False)
+                input_answer = self.clean_number(input_answer, ".", 1, False)
+                input_answer = self.remove_char_overflow(
+                    input_answer,
+                    "-",
+                    1,
+                    False
+                )
                 try:
                     self.usr_answer = float(input_answer)
                     return self.answer_was_found
@@ -199,7 +220,7 @@ class AskQuestion:
         answer_found = False
         usr_answer = ""
         self.usr_answer = ""
-        while answer_found == False:
+        while answer_found is False:
             usr_answer = input(str(question))
             answer_found = self.test_input(usr_answer, answer_type)
         return self.usr_answer
@@ -218,4 +239,6 @@ if __name__ == "__main__":
     if answer > 1:
         ADD_S = "s"
     print(f"You are {answer} year{ADD_S} old")
+    answer = AQI.ask_question("Enter a ufloat:", "ufloat")
+    print(f"You entered {answer}")
     AQI.pause()
