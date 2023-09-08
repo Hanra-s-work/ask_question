@@ -1,4 +1,4 @@
-name: ask-question
+name: ask-question-pypi
 
 on:
   push:
