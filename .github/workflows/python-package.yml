@@ -2,9 +2,13 @@ name: ask-question-pypi
 
 on:
   push:
-    branches: [ "main" ]
+    tags: 
+      # - "v*"
+      - "gitignore"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
