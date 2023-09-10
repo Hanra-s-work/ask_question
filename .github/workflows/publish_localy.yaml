@@ -1,9 +1,9 @@
-name: ask-question-pypi
+name: ask-question-gh-packages
 
 on:
   push:
-    tags: 
-      - "v*"
+    tags:
+      - 'v*'
   pull_request:
     branches:
       - main
@@ -17,6 +17,7 @@ env:
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -151,13 +152,20 @@ jobs:
         pip install build
         python -m build
 
-      # Add the following steps if you want to publish to PyPI
-    - name: Build and publish to PyPI
+    # Add the following steps if you want to publish to GitHub Releases
+    - name: Update author
+      run: |
+        git config --local user.name "${{secrets.USER_NAME_E}}"
+        git config --local user.email "${{secrets.USER_EMAIL_E}}"
+    - name: Publish as GitHub release
       if: matrix.python-version == env.MATRIX_VERSION_PUBLISHING
       run: |
-        python -m build
-        pip install twine
-        twine upload dist/*
-      env:
-        TWINE_USERNAME: __token__
-        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+        tag_version="$(cat ${{env.TAG_FILE}})"
+        echo "Publishing $tag_version as a GitHub release"
+        echo "Tag version: $tag_version"
+        tag_description="Bump version to $tag_version"
+        echo "Tag description: $tag_description"
+        echo "Creating tag"
+        git tag -a "$tag_version" -m "$tag_description"
+        echo "Publishing tag"
+        git push origin $tag_version
