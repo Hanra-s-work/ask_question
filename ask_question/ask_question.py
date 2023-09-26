@@ -23,6 +23,7 @@ class AskQuestion:
 
     def __init__(self, human_type: dict = {}, illegal_characters_nb: str = "") -> None:
         """ The globals for the class """
+        self.__version__ = "1.0.0"
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
@@ -78,10 +79,10 @@ class AskQuestion:
                     return False
         return True
 
-    def is_float(self, nb: str) -> bool:
+    def is_float(self, number: str) -> bool:
         """ Check if the given string is a float """
         try:
-            float(nb)
+            float(number)
             return True
         except ValueError:
             return False
