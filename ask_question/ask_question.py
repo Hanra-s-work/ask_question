@@ -27,7 +27,7 @@ class AskQuestion:
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
-        self.version = "1.0.0"
+        self.version = self.__version__
         self.usr_answer = ""
         self.answer_was_found = True
         self.answer_was_not_found = False
