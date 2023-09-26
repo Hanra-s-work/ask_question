@@ -1,4 +1,19 @@
-# ask_question
+# Ask Question
+
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/ask_question)
+![PyPI - Implementation](https://img.shields.io/pypi/implementation/ask_question)
+![PyPI - Wheel](https://img.shields.io/pypi/wheel/ask_question)
+![PyPI - Version](https://img.shields.io/pypi/v/ask_question?label=pypi%20package:%20ask_question)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/ask_question)
+![PyPI - License](https://img.shields.io/pypi/l/ask_question)
+![Execution status](https://github.com/Hanra-s-work/ask_question/actions/workflows/python-package.yml/badge.svg)
+![GitHub Workflow Status (with event)](https://img.shields.io/github/actions/workflow/status/Hanra-s-work/ask_question/python-package.yml)
+![GitHub repo size](https://img.shields.io/github/repo-size/Hanra-s-work/ask_question)
+![GitHub Repo stars](https://img.shields.io/github/stars/Hanra-s-work/ask_question)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/Hanra-s-work/ask_question)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/Hanra-s-work/ask_question/main)
+
+[![Static Badge](https://img.shields.io/badge/Buy_me_a_tea-Hanra-%235F7FFF?style=flat-square&logo=buymeacoffee&label=Buy%20me%20a%20coffee&labelColor=%235F7FFF&color=%23FFDD00&link=https%3A%2F%2Fwww.buymeacoffee.com%2Fhanra)](https://www.buymeacoffee.com/hanra)
 
 ## Description
 
@@ -6,14 +21,14 @@ This is a python package I created in order to simplify the boiling process when
 
 ## Table of Content
 
-1. [ask_question](#askquestion)
+1. [ask_question](#ask-question)
 2. [Description](#description)
 3. [Table of Content](#table-of-content)
 4. [Installation](#installation)
     1. [Using pip](#using-pip)
     2. [Using python](#using-python)
 5. [Usage](#usage)
-    1. [Impoting](#importing)
+    1. [Importing](#importing)
     2. [Initialising](#initialising)
     3. [Calling the pause function](#calling-the-pause-function)
     4. [Asking a question](#asking-a-question)
@@ -94,14 +109,14 @@ The outputs of this functions can be:
 * int   = a whole number
 * float = a floating number
 
-#### Where do you live ?
+#### Where do you live
 
 ```py
 answer = AQI.ask_question("Where are you from? ", "str")
 print(f"You live in {answer}!")
 ```
 
-#### How old are you ?
+#### How old are you
 
 ```py
 answer = AQI.ask_question("How old are you?", "uint")
@@ -111,7 +126,7 @@ if answer > 1:
 print(f"You are {answer} year{ADD_S} old !")
 ```
 
-#### Do you like sugar ?
+#### Do you like sugar
 
 ```py
 answer = AQI.ask_question("Do you like sugar? [(Y)es/(n)o]: ", "bool")
