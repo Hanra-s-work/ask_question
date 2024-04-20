@@ -234,7 +234,7 @@ class AskQuestion:
 
 
 if __name__ == "__main__":
-    AQI = AskQuestion(dict(), "")
+    AQI = AskQuestion({}, "")
     answer = AQI.ask_question("How old are you?", "uint")
     ADD_S = ""
     if answer > 1:
