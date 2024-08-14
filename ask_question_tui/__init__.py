@@ -2,32 +2,32 @@
 File in charge of automating and simplify the process of asking a question and expecting a specific type of response
 """
 
-from .ask_question import AskQuestion
+from .ask_question_tui import AskQuestionTUI
 
-__all__ = ["AskQuestion"]
+__all__ = ["AskQuestionTUI"]
 __version__ = "1.2.0"
 
 
-class ask_question(AskQuestion):
+class ask_question_tui(AskQuestionTUI):
     """ Ask a question to the user while expecting a specific format """
     pass
 
 
-class askquestion(AskQuestion):
+class askquestiontui(AskQuestionTUI):
     """ Ask a question to the user while expecting a specific format """
     pass
 
 
-class Ask_Question(AskQuestion):
+class Ask_Question_TUI(AskQuestionTUI):
     """ Ask a question to the user while expecting a specific format """
     pass
 
 
-class ASK_QUESTION(AskQuestion):
+class ASK_QUESTION_TUI(AskQuestionTUI):
     """ Ask a question to the user while expecting a specific format """
     pass
 
 
-class ASKQUESTION(AskQuestion):
+class ASKQUESTIONTUI(AskQuestionTUI):
     """ Ask a question to the user while expecting a specific format """
     pass

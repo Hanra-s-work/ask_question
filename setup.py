@@ -12,6 +12,7 @@ setuptools.setup(
     version='1.2.0',
     packages=setuptools.find_packages(),
     install_requires=[
+        "asciimatics-overlay-ov==1.0.2"
     ],
     author="Henry Letellier",
     author_email="henrysoftwarehouse@protonmail.com",
