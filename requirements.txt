@@ -1,4 +1,4 @@
-setuptools ==70.3.0
+setuptools ==72.2.0
 wheel ==0.44.0
 build ==1.2.1
 flake8 ==7.1.1
