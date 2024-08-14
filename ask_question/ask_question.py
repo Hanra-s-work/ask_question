@@ -213,10 +213,9 @@ class AskQuestion:
                 except BaseException:
                     self.usr_answer = input_answer
                     return self.answer_was_not_found
-            print(
-                f"Please enter a response of type '{
-                    self.human_type[answer_type]}'"
-            )
+            res = "Please enter a response of type '"
+            res += f"{self.human_type[answer_type]}'"
+            print(res)
             self.usr_answer = ""
             return self.answer_was_not_found
         print(
