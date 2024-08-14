@@ -15,6 +15,7 @@ Crediting the author is appreciated.
 __Version__ = "1.1.0"
 __Author__ = "(c) Henry Letellier"
 
+from typing import Union
 from string import printable
 import asciimatics.widgets as WIG
 from asciimatics.event import Event
@@ -295,7 +296,7 @@ class AskQuestionAnswerProcessing:
             return self.answer_was_found
         return self.answer_was_not_found
 
-    def test_input(self, input_answer: str, answer_type: str, is_tui: bool = False) -> (str | int | float | bool | list):
+    def test_input(self, input_answer: str, answer_type: str, is_tui: bool = False) -> Union[str, int, float, bool, list]:
         """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
         if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
             self.illegal_characters_found = self.contains_illegal_characters(
@@ -428,7 +429,7 @@ class AskQuestionTUIManagement(WIG.Frame, AsciiMaticsOverlayMain, FrameNodes):
         self.apply_text_to_display(
             self.error_message_widget, self.error_message)
 
-    def _check_usr_input(self) -> str | int | float | bool:
+    def _check_usr_input(self) -> Union[str, int, float, bool]:
         """ Check the input provided by the user """
         usr_input = self.get_widget_value(self.textbox_widget)
         self.usr_answer = self.ask_question_answer_processing.test_input(
@@ -487,7 +488,7 @@ class AskQuestionTUI:
             illegal_characters_nb=illegal_characters_nb
         )
 
-    def ask_question_tty(self, question: str, answer_type: str) -> (str | int | float | bool):
+    def ask_question_tty(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
         """ Ask a question and continue asking until type met """
         answer_found = False
         usr_answer = ""
@@ -504,7 +505,7 @@ class AskQuestionTUI:
         self.usr_answer = self.ask_question_answer_processing.usr_answer
         return self.usr_answer
 
-    def ask_question_tui(self, question: str, answer_type: str) -> (str | int | float | bool):
+    def ask_question_tui(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
         """ Display a graphical interface to ask the question """
         aqtuim = AskQuestionTUIManagement(
             screen=self.screen,
@@ -520,7 +521,7 @@ class AskQuestionTUI:
         self.user_has_decided_to_quit = aqtuim.user_has_decided_to_quit
         return self.usr_answer
 
-    def ask_question(self, question: str, answer_type: str, tui_enabled: bool = None) -> (str | int | float | bool):
+    def ask_question(self, question: str, answer_type: str, tui_enabled: bool = None) -> Union[str, int, float, bool]:
         """ Display a graphical or non-graphical question based on the input """
         if tui_enabled is None:
             tui_enabled = self.tui_enabled
