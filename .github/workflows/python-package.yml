@@ -2,10 +2,7 @@ name: ask-question-pypi
 on:
   push:
     tags:
-      - 'v*'
-  pull_request:
-    branches:
-      - main
+      - "v*.*.*"
   workflow_dispatch:
 
 env:
