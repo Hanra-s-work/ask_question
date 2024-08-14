@@ -3,6 +3,6 @@ wheel == 0.41.2
 build ==1.2.1
 flake8 ==7.1.1
 pytest ==8.3.2
-asciimatics == 1.14.0
+asciimatics ==1.15.0
 python-magic == 0.4.27
 asciimatics-overlay-ov == 1.0.3
