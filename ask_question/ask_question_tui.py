@@ -27,6 +27,7 @@ class AskQuestionAnswerProcessing:
     """ Class in charge of processing the input of the user and saying if it is correct or not """
 
     def __init__(self, human_type: dict = {}, illegal_characters_nb: str = "") -> None:
+        print("Warning, ask_question_tui is still being developed, this means that it is unstable.")
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
@@ -311,7 +312,8 @@ class AskQuestionAnswerProcessing:
             if status3 == self.answer_was_found:
                 return self.answer_was_found
             self.usr_answer = ""
-            response = f"Please enter a response of type '{self.human_type[answer_type]}'"
+            response = f"Please enter a response of type '{
+                self.human_type[answer_type]}'"
             return self._display_accordingly(response, is_tui)
         self.usr_answer = ""
         response = "Response must not be empty or only contain spaces or any non visible character."
