@@ -12,8 +12,6 @@ setuptools.setup(
     version='1.2.0',
     packages=setuptools.find_packages(),
     install_requires=[
-        "asciimatics==1.14.0",
-        "python-magic==0.4.27",
         "asciimatics-overlay-ov==1.0.3"
     ],
     author="Henry Letellier",
