@@ -2,7 +2,6 @@
 File in charge of containing the demo script for the ask question TUI library
 """
 
-from string import printable
 import asciimatics.widgets as WIG
 from asciimatics.event import Event
 from asciimatics.screen import Screen as SC

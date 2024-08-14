@@ -312,8 +312,8 @@ class AskQuestionAnswerProcessing:
             if status3 == self.answer_was_found:
                 return self.answer_was_found
             self.usr_answer = ""
-            response = f"Please enter a response of type '{
-                self.human_type[answer_type]}'"
+            response = "Please enter a response of type '"
+            response += f"{self.human_type[answer_type]}'"
             return self._display_accordingly(response, is_tui)
         self.usr_answer = ""
         response = "Response must not be empty or only contain spaces or any non visible character."

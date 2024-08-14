@@ -54,13 +54,21 @@ class AskQuestion:
         if self.illegal_characters_nb == "":
             self.illegal_characters_nb = printable.replace("-", "")
             self.illegal_characters_nb = self.illegal_characters_nb.replace(
-                ".", "")
+                ".",
+                ""
+            )
             self.illegal_characters_nb = self.illegal_characters_nb.replace(
-                ",", "")
+                ",",
+                ""
+            )
             self.illegal_characters_nb = self.illegal_characters_nb.replace(
-                "+", "")
+                "+",
+                ""
+            )
             self.illegal_characters_nb = self.illegal_characters_nb.replace(
-                "0123456789", "")
+                "0123456789",
+                ""
+            )
 
     def is_empty(self, string: str) -> bool:
         """ Check if the string is not empty """
@@ -206,7 +214,8 @@ class AskQuestion:
                     self.usr_answer = input_answer
                     return self.answer_was_not_found
             print(
-                f"Please enter a response of type '{self.human_type[answer_type]}'"
+                f"Please enter a response of type '{
+                    self.human_type[answer_type]}'"
             )
             self.usr_answer = ""
             return self.answer_was_not_found
