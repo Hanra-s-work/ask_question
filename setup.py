@@ -12,7 +12,7 @@ setuptools.setup(
     version='1.2.0',
     packages=setuptools.find_packages(),
     install_requires=[
-        "asciimatics-overlay-ov==1.0.6"
+        "asciimatics-overlay-ov==1.0.7"
     ],
     author="Henry Letellier",
     author_email="henrysoftwarehouse@protonmail.com",
