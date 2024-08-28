@@ -1,1 +1,1 @@
-asciimatics-overlay-ov ==1.0.7
+asciimatics-overlay-ov ==1.0.10
