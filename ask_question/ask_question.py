@@ -12,18 +12,19 @@ This module is provided as if and without any warranty
 Crediting the author is appreciated.
 """
 
-__Version__ = "1.1.0"
+__Version__ = "1.2.0"
 __Author__ = "(c) Henry Letellier"
 
 from string import printable
+from typing import Union, Dict
 
 
 class AskQuestion:
     """ An advanced function that contains boiling to gain time when asking a question """
 
-    def __init__(self, human_type: dict = {}, illegal_characters_nb: str = "") -> None:
+    def __init__(self, human_type: Dict = {}, illegal_characters_nb: str = "") -> None:
         """ The globals for the class """
-        self.__version__ = "1.0.0"
+        self.__version__ = "1.2.0"
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
@@ -35,7 +36,7 @@ class AskQuestion:
 
     def check_load(self) -> None:
         """ Check that the ressources are present """
-        if self.human_type == dict():
+        if isinstance(self.human_type, dict) is False:
             self.human_type = {
                 "int": "whole number (-1, 0, 1, 2, 3, etc...)",
                 "float": "floating number (-1.2, 0.1, 1.2, etc...)",
@@ -47,8 +48,8 @@ class AskQuestion:
                 "char": "alphabet (from a to z and A to Z)",
                 "ascii": "ascii Table",
                 "str": "string (any character you can type)",
-                "version": "version (numbers seperated by '.' characters)",
-                "ver": "version (numbers seperated by '.' characters)",
+                "version": "version (numbers separated by '.' characters)",
+                "ver": "version (numbers separated by '.' characters)",
                 "bool": "boolean (yes/True/1 or no/False/0 answer type)",
             }
         if self.illegal_characters_nb == "":
@@ -133,7 +134,7 @@ class AskQuestion:
                 string, char, tolerance, case_sensitive)
         return string
 
-    def test_input(self, input_answer: str, answer_type: str) -> (str or int or float or bool):
+    def test_input(self, input_answer: str, answer_type: str) -> Union[str, int, float, bool]:
         """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
         if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
             contains_illegal_characters = self.contains_illegal_characters(
@@ -224,7 +225,7 @@ class AskQuestion:
         self.usr_answer = ""
         return self.answer_was_not_found
 
-    def ask_question(self, question: str, answer_type: str) -> (str or int or float or bool):
+    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
         """ Ask a question and continue asking until type met """
         answer_found = False
         usr_answer = ""
@@ -245,7 +246,7 @@ if __name__ == "__main__":
     AQI = AskQuestion({}, "")
     answer = AQI.ask_question("How old are you?", "uint")
     ADD_S = ""
-    if answer > 1:
+    if isinstance(answer, int) and answer > 1:
         ADD_S = "s"
     print(f"You are {answer} year{ADD_S} old")
     answer = AQI.ask_question("Enter a ufloat:", "ufloat")
