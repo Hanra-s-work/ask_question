@@ -3,11 +3,16 @@ import unittest.mock
 from sys import stderr
 from ask_question import AskQuestion
 
+DEBUG = True
+TUI_KEY = "tui"
+MESSAGE_KEY = "message"
+USR_ANSWER_KEY = "user_answer"
+ANSWER_FOUND_KEY = "answer_found"
+
 
 def print_debug(string: str = "") -> None:
     """ Print debug messages """
-    debug = False
-    if debug is True:
+    if DEBUG is True:
         print(f"DEBUG: {string}", file=stderr)
 
 
@@ -90,7 +95,7 @@ def test_ask_question_invalid_input() -> None:
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -121,7 +126,7 @@ def test_ask_question_empty_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -132,7 +137,7 @@ def test_ask_question_space_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -143,7 +148,7 @@ def test_ask_question_tab_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -154,7 +159,7 @@ def test_ask_question_tab_and_space_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -168,7 +173,7 @@ def test_ask_question_tab_and_space_mix_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -180,7 +185,7 @@ def test_ask_question_whitespace_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -192,7 +197,7 @@ def test_ask_question_tabs_input():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -204,7 +209,7 @@ def test_ask_question_invalid_characters():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -226,7 +231,7 @@ def test_ask_question_invalid_uint():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
 
 
@@ -248,5 +253,5 @@ def test_ask_question_invalid_ufloat():
     print_debug(f"response = {response}")
     response2 = aqi.usr_answer
     print_debug(f"response2 = {response2}")
-    assert response is False
+    assert response[ANSWER_FOUND_KEY] is False
     assert response2 == ""
