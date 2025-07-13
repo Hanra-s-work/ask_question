@@ -3,7 +3,7 @@ import unittest.mock
 from sys import stderr
 from ask_question import AskQuestion
 
-DEBUG = True
+DEBUG = False
 TUI_KEY = "tui"
 MESSAGE_KEY = "message"
 USR_ANSWER_KEY = "user_answer"
