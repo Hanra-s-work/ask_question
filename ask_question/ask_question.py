@@ -174,7 +174,7 @@ class AskQuestion:
 
     def _process_isint(self, input_answer: str, answer_type: str) -> bool:
         """ Process the uint data """
-        if ("isint" in answer_type or "int" in answer_type) and ("uint" not in answer_type or "isuint" not in answer_type) and self.illegal_characters_found is False:
+        if (answer_type == "int" or answer_type == "isint") and not ("uint" in answer_type or "isuint" in answer_type) and self.illegal_characters_found is False:
             input_answer = self.clean_number(input_answer, ".", 0, False)
             input_answer = self.remove_char_overflow(
                 input_answer, "-", 1, False)
@@ -191,7 +191,7 @@ class AskQuestion:
 
     def _process_isfloat(self, input_answer: str, answer_type: str) -> bool:
         """ Process the float data """
-        if ("isfloat" in answer_type or "float" in answer_type) and ("isufloat" not in answer_type and "ufloat" not in answer_type) and self.illegal_characters_found is False:
+        if ("isfloat" in answer_type or "float" in answer_type) and not ("isufloat" in answer_type or "ufloat" in answer_type) and self.illegal_characters_found is False:
             input_answer = self.clean_number(input_answer, ".", 1, False)
             input_answer = self.remove_char_overflow(
                 input_answer,
@@ -220,8 +220,10 @@ class AskQuestion:
     def _process_isufloat(self, input_answer: str, answer_type: str) -> bool:
         """ Process the ufloat data """
         if self.is_float(input_answer) is True and ("isufloat" in answer_type or "ufloat" in answer_type):
-            self.usr_answer = float(input_answer)
-            return self.answer_was_found
+            if len(input_answer) > 0 and input_answer[0] != "-":
+                self.usr_answer = float(input_answer)
+                return self.answer_was_found
+            return self.answer_was_not_found
         return self.answer_was_not_found
 
     def _process_isnum(self, input_answer: str, answer_type: str) -> bool:
