@@ -17,7 +17,7 @@
 
 ## Description
 
-This is a python package I created in order to simplify the boiling process when asking the user a question via TTY.
+This is a python package I created in order to simplify the boiling process when asking the user a question via TTY or TUI (Terminal User Interface).
 
 ## Table of Content
 
@@ -75,7 +75,7 @@ import ask_question as aq
 
 ### Initialising
 
-The generic class is: `AskQuestion(human_type:dict={}, illegal_characters_nb:str="")`
+The generic class is: `AskQuestion(human_type: dict = {}, illegal_characters_nb: str = "", tui: bool = False)`
 
 ```py
 AQI = aq.AskQuestion()
@@ -86,13 +86,13 @@ AQI = aq.AskQuestion()
 The generic function is:
 
 ```py
-pause(self, pause_message:str="Press enter to continue...")
+pause(self, pause_message: str = "Press enter to continue...")
 ```
 
 The output is: None
 
 ```py
-AQI.pause("Press enter to continue ...")
+AQI.pause("Press enter to continue...")
 ```
 
 ### Asking a Question
@@ -100,7 +100,7 @@ AQI.pause("Press enter to continue ...")
 The generic function to ask a question is:
 
 ```py
-ask_question(self, question:str, answer_type:str)
+ask_question(self, question: str, answer_type: str)
 ```
 
 The outputs of this functions can be:
@@ -231,13 +231,6 @@ Quick way (I assume you have already initialised the class):
 print(f"AskQuestion is written by {AQI.author}")
 ```
 
-## Version
+## Running unit tests
 
-The current version is 1.0.0
-
-An easy way to display the version is:
-
-```py
-import ask_question as aq
-print(f"Version : {aq.__Version__}")
-```
+Although they might not be bundled in the module itself, you can clone the source repository, intall the requirement at the root and run `pytest -s` at the root of the repository to see the result.
