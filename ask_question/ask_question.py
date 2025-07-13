@@ -47,13 +47,15 @@ class AskQuestion:
                 "ufloat": "whole positive floating number (0.1, 1.2, etc ...)",
                 "num": "numeric (numbers from 0 onwards)",
                 "alnum": "alphanumeric (only numbers and the alphabet)",
-                "isalpha": "alphabet (from a to z and A to Z)",
+                "alpha": "alphabet (from a to z and A to Z)",
                 "char": "alphabet (from a to z and A to Z)",
                 "ascii": "ascii Table",
                 "str": "string (any character you can type)",
                 "version": "version (numbers separated by '.' characters)",
                 "ver": "version (numbers separated by '.' characters)",
                 "bool": "boolean (yes/True/1 or no/False/0 answer type)",
+                "up": "Convert the user input to uppercase",
+                "low": "Convert the user input to lowercase"
             }
         if self.illegal_characters_nb == "":
             self.illegal_characters_nb = printable.replace("-", "")
@@ -170,86 +172,9 @@ class AskQuestion:
             self._answer_found_key: answer_status
         }
 
-    def _process_isalnum(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the isalnum data """
-        if input_answer.isalnum() is True and "alnum" in answer_type:
-            self.usr_answer = input_answer
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_isalpha(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the isalpha data """
-        if input_answer.isalpha() is True and "char" in answer_type:
-            self.usr_answer = input_answer
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_isdigit(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the isdigit data """
-        if input_answer.isdigit() is True and "num" in answer_type:
-            self.usr_answer = float(input_answer)
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_isascii(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the isascii data """
-        if input_answer.isascii() is True and "ascii" in answer_type:
-            self.usr_answer = input_answer
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_to_up(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the to up data """
-        if "up" in answer_type:
-            self.usr_answer = input_answer.upper()
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_to_low(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the to low data """
-        if "low" in answer_type:
-            self.usr_answer = input_answer.lower()
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_version(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the version data """
-        if self.is_version(input_answer) is True and "version" in answer_type or "ver" in answer_type:
-            self.usr_answer = input_answer
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_uint(self, input_answer: str, answer_type: str) -> bool:
+    def _process_isint(self, input_answer: str, answer_type: str) -> bool:
         """ Process the uint data """
-        if input_answer.isdigit() is True and "uint" in answer_type:
-            self.usr_answer = int(input_answer)
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_ufloat(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the ufloat data """
-        if self.is_float(input_answer) is True and "ufloat" in answer_type:
-            self.usr_answer = float(input_answer)
-            return self.answer_was_found
-        return self.answer_was_not_found
-
-    def _process_bool(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the bool data """
-        if "bool" in answer_type:
-            input_answer = input_answer.lower()
-            if "y" in input_answer or "t" in input_answer or "1" in input_answer:
-                self.usr_answer = True
-                return self.answer_was_found
-            if "n" in input_answer or "f" in input_answer or "0" in input_answer:
-                self.usr_answer = False
-                return self.answer_was_found
-            self.usr_answer = None
-            return self.answer_was_not_found
-        return self.answer_was_not_found
-
-    def _process_int(self, input_answer: str, answer_type: str) -> bool:
-        """ Process the uint data """
-        if "int" in answer_type and "uint" not in answer_type and self.illegal_characters_found is False:
+        if ("isint" in answer_type or "int" in answer_type) and ("uint" not in answer_type or "isuint" not in answer_type) and self.illegal_characters_found is False:
             input_answer = self.clean_number(input_answer, ".", 0, False)
             input_answer = self.remove_char_overflow(
                 input_answer, "-", 1, False)
@@ -264,9 +189,9 @@ class AskQuestion:
                 return self.answer_was_not_found
         return self.answer_was_not_found
 
-    def _process_float(self, input_answer: str, answer_type: str) -> bool:
+    def _process_isfloat(self, input_answer: str, answer_type: str) -> bool:
         """ Process the float data """
-        if "float" in answer_type and "ufloat" not in answer_type and self.illegal_characters_found is False:
+        if ("isfloat" in answer_type or "float" in answer_type) and ("isufloat" not in answer_type and "ufloat" not in answer_type) and self.illegal_characters_found is False:
             input_answer = self.clean_number(input_answer, ".", 1, False)
             input_answer = self.remove_char_overflow(
                 input_answer,
@@ -285,17 +210,110 @@ class AskQuestion:
                 return self.answer_was_not_found
         return self.answer_was_not_found
 
+    def _process_isuint(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the uint data """
+        if input_answer.isdigit() is True and ("isuint" in answer_type or "uint" in answer_type):
+            self.usr_answer = int(input_answer)
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isufloat(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the ufloat data """
+        if self.is_float(input_answer) is True and ("isufloat" in answer_type or "ufloat" in answer_type):
+            self.usr_answer = float(input_answer)
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isnum(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the isnum data """
+        if input_answer.isdigit() is True and ("isnum" in answer_type or "num" in answer_type):
+            self.usr_answer = float(input_answer)
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isalnum(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the isalnum data """
+        if input_answer.isalnum() is True and ("isalnum" in answer_type or "alnum" in answer_type):
+            self.usr_answer = input_answer
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isalpha(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the isalpha data """
+        if input_answer.isalpha() is True and ("isalpha" in answer_type or "alpha" in answer_type):
+            self.usr_answer = input_answer
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_ischar(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the char data """
+        if input_answer.isalpha() is True and ("ischar" in answer_type or "char" in answer_type):
+            self.usr_answer = input_answer
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isascii(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the isascii data """
+        if input_answer.isascii() is True and ("isascii" in answer_type or "ascii" in answer_type):
+            self.usr_answer = input_answer
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isstr(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the isstr data """
+        if ("isstr" in answer_type or "str" in answer_type) and isinstance(input_answer, str) is True:
+            for i in input_answer:
+                if i not in printable:
+                    return self.answer_was_not_found
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isversion(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the version data """
+        if self.is_version(input_answer) is True and ("isversion" in answer_type or "version" in answer_type or "isver" in answer_type or "ver" in answer_type):
+            self.usr_answer = input_answer
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_isbool(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the bool data """
+        if ("isbool" in answer_type or "bool" in answer_type):
+            input_answer = input_answer.lower()
+            if "y" in input_answer or "t" in input_answer or "1" in input_answer:
+                self.usr_answer = True
+                return self.answer_was_found
+            if "n" in input_answer or "f" in input_answer or "0" in input_answer:
+                self.usr_answer = False
+                return self.answer_was_found
+            self.usr_answer = None
+            return self.answer_was_not_found
+        return self.answer_was_not_found
+
+    def _process_to_up(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the to up data """
+        if "up" in answer_type:
+            self.usr_answer = input_answer.upper()
+            return self.answer_was_found
+        return self.answer_was_not_found
+
+    def _process_to_low(self, input_answer: str, answer_type: str) -> bool:
+        """ Process the to low data """
+        if "low" in answer_type:
+            self.usr_answer = input_answer.lower()
+            return self.answer_was_found
+        return self.answer_was_not_found
+
     def _first_chunk(self, input_answer: str, answer_type: str) -> bool:
         """ The second chunk in charge of checking the inputted data """
-        if self._process_isalnum(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isint(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_isalpha(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isfloat(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_isdigit(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isuint(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_isascii(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isufloat(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_to_up(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isnum(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
         return self.answer_was_not_found
 
@@ -303,43 +321,56 @@ class AskQuestion:
         """ The second chunk in charge of checking the inputted data """
         if self._process_to_low(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_version(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isalnum(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_uint(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isalpha(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_ufloat(input_answer, answer_type) is self.answer_was_found:
+        if self._process_ischar(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_bool(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isascii(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
         return self.answer_was_not_found
 
     def _third_chunk(self, input_answer: str, answer_type: str) -> bool:
         """ The third chunk in charge of checking the inputted data """
-        if self._process_int(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isstr(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
-        if self._process_float(input_answer, answer_type) is self.answer_was_found:
+        if self._process_isversion(input_answer, answer_type) is self.answer_was_found:
+            return self.answer_was_found
+        if self._process_isbool(input_answer, answer_type) is self.answer_was_found:
+            return self.answer_was_found
+        if self._process_to_up(input_answer, answer_type) is self.answer_was_found:
+            return self.answer_was_found
+        if self._process_to_low(input_answer, answer_type) is self.answer_was_found:
             return self.answer_was_found
         return self.answer_was_not_found
 
-    def test_input(self, input_answer: str, answer_type: str) -> Union[bool, Dict[str, Union[str, int, float, bool, List]]]:
+    def test_input(self, input_answer: str, answer_type: str) -> Dict[str, Union[str, int, float, bool, List]]:
         """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
+        answer_type_cleaned = answer_type\
+            .replace("is", "", 1)\
+            .replace("is_", "", 1)\
+            .replace("is ", "", 1)
         if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
             self.illegal_characters_found = self.contains_illegal_characters(
                 input_answer,
                 self.illegal_characters_nb
             )
-            status1 = self._first_chunk(input_answer, answer_type)
+            status1 = self._first_chunk(input_answer, answer_type_cleaned)
             if status1 == self.answer_was_found:
                 return self._display_accordingly(input_answer, "", self.answer_was_found)
-            status2 = self._second_chunk(input_answer, answer_type)
+            status2 = self._second_chunk(input_answer, answer_type_cleaned)
             if status2 == self.answer_was_found:
                 return self._display_accordingly(input_answer, "", self.answer_was_found)
-            status3 = self._third_chunk(input_answer, answer_type)
+            status3 = self._third_chunk(input_answer, answer_type_cleaned)
             if status3 == self.answer_was_found:
                 return self._display_accordingly(input_answer, "", self.answer_was_found)
             self.usr_answer = ""
             response = "Please enter a response of type '"
-            response += f"{self.human_type[answer_type]}'"
+            if answer_type_cleaned in self.human_type:
+                response += f"{self.human_type[answer_type_cleaned]}'"
+            else:
+                response += "Unknown demanded type"
             return self._display_accordingly(input_answer, response, self.answer_was_not_found)
         self.usr_answer = ""
         response = "Response must not be empty or only contain spaces or any non visible character."
