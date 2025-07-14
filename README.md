@@ -41,7 +41,7 @@ This is a python package I created in order to simplify the boiling process when
     2. [Changing the description](#changing-the-descriptions)
     3. [Changing both](#changing-both)
 8. [Author](#author)
-9. [Version](#version)
+9. [Note to the devs](#note-to-the-devs)
 
 ## Installation
 
@@ -146,12 +146,12 @@ Here are all the available boiling options and their explanation:
 * ufloat = whole positive floating number (0.1, 1.2, etc ...)
 * num = numeric (numbers from 0 onwards)
 * alnum = alphanumeric (only numbers and the alphabet)
-* isalpha = alphabet (from a to z and A to Z)
+* alpha = alphabet (from a to z and A to Z)
 * char = alphabet (from a to z and A to Z)
 * ascii = ascii Table
 * str = string (any character you can type)
-* version = version (numbers seperated by '.' characters)
-* ver = version (numbers seperated by '.' characters)
+* version = version (numbers separated by '.' characters)
+* ver = version (numbers separated by '.' characters)
 * bool = boolean (yes/True/1 or no/False/0 answer type)
 
 ## Change the initialisation content
@@ -180,12 +180,12 @@ human_type = {
     "ufloat":"whole positive floating number (0.1, 1.2, etc ...)",
     "num":"numeric (numbers from 0 onwards)",
     "alnum":"alphanumeric (only numbers and the alphabet)",
-    "isalpha":"alphabet (from a to z and A to Z)",
+    "alpha":"alphabet (from a to z and A to Z)",
     "char":"alphabet (from a to z and A to Z)",
     "ascii":"ascii Table",
     "str":"string (any character you can type)",
-    "version":"version (numbers seperated by '.' characters)",
-    "ver":"version (numbers seperated by '.' characters)",
+    "version":"version (numbers separated by '.' characters)",
+    "ver":"version (numbers separated by '.' characters)",
     "bool":"boolean (yes/True/1 or no/False/0 answer type)",
 }
 AQI = aq.AskQuestion(human_type)
@@ -207,12 +207,12 @@ human_type = {
     "ufloat":"whole positive floating number (0.1, 1.2, etc ...)",
     "num":"numeric (numbers from 0 onwards)",
     "alnum":"alphanumeric (only numbers and the alphabet)",
-    "isalpha":"alphabet (from a to z and A to Z)",
+    "alpha":"alphabet (from a to z and A to Z)",
     "char":"alphabet (from a to z and A to Z)",
     "ascii":"ascii Table",
     "str":"string (any character you can type)",
-    "version":"version (numbers seperated by '.' characters)",
-    "ver":"version (numbers seperated by '.' characters)",
+    "version":"version (numbers separated by '.' characters)",
+    "ver":"version (numbers separated by '.' characters)",
     "bool":"boolean (yes/True/1 or no/False/0 answer type)",
 }
 AQI = aq.AskQuestion(human_type)
@@ -237,6 +237,6 @@ Although they might not be bundled in the module itself, you can clone the sourc
 
 ## Note to the devs
 
-Due to the update of the packaging methods (switching from setup.py to pyproject.toml) and for package stability tracking reasons, it is now required (or strongly suggested) you remove the resuting ask_question package that gets installed alongside with it's dependencies.
+Due to the update of the packaging methods (switching from setup.py to pyproject.toml) and for package stability tracking reasons, it is now required (or strongly suggested) you remove the resulting ask_question package that gets installed alongside with it's dependencies.
 
 You can do so with the following command: `pip uninstall ask_question -y`
