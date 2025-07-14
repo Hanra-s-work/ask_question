@@ -75,7 +75,7 @@ import ask_question as aq
 
 ### Initialising
 
-The generic class is: `AskQuestion(human_type: dict = {}, illegal_characters_nb: str = "", tui: bool = False)`
+The generic class is: `AskQuestion(human_type: dict = {}, illegal_characters_nb: str = "", tui: bool = False, allow_blank: bool = False)`
 
 ```py
 AQI = aq.AskQuestion()
@@ -108,6 +108,7 @@ The outputs of this functions can be:
 * str   = a string
 * int   = a whole number
 * float = a floating number
+* bool  = a boolean value (True or False)
 
 #### Where do you live
 

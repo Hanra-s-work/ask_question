@@ -382,7 +382,7 @@ class AskQuestion:
         response = "Response must not be empty or only contain spaces or any non visible character."
         return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error)
 
-    def ask_question(self, question: str, answer_type: str, print_error: bool = False) -> Union[str, int, float, bool]:
+    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
         """ Ask a question and continue asking until type met """
         answer_found = False
         usr_answer = ""
@@ -392,7 +392,7 @@ class AskQuestion:
             answer_found: Union[bool, Dict] = self.test_input(
                 usr_answer,
                 answer_type,
-                print_error=print_error
+                print_error=False
             )
             if isinstance(answer_found, dict):
                 if answer_found[self._answer_found_key] is False:
@@ -408,6 +408,7 @@ class AskQuestion:
 
 
 if __name__ == "__main__":
+    print("tui=True, allow_blank=False")
     AQI = AskQuestion({}, "", tui=True, allow_blank=False)
     answer = AQI.ask_question("How old are you?", "uint")
     ADD_S = ""
@@ -417,8 +418,28 @@ if __name__ == "__main__":
     answer = AQI.ask_question("Enter a ufloat:", "ufloat")
     print(f"You entered {answer}")
     AQI.pause()
-    print("Allow blank = True")
+    print("tui=True, allow blank=True")
     AQI = AskQuestion({}, "", tui=True, allow_blank=True)
+    answer = AQI.ask_question("How old are you?", "uint")
+    ADD_S = ""
+    if isinstance(answer, int) and answer > 1:
+        ADD_S = "s"
+    print(f"You are '{answer}' year{ADD_S} old")
+    answer = AQI.ask_question("Enter a ufloat:", "ufloat")
+    print(f"You entered '{answer}'")
+    AQI.pause()
+    print("tui=False, allow_blank=False")
+    AQI = AskQuestion({}, "", tui=False, allow_blank=False)
+    answer = AQI.ask_question("How old are you?", "uint")
+    ADD_S = ""
+    if isinstance(answer, int) and answer > 1:
+        ADD_S = "s"
+    print(f"You are {answer} year{ADD_S} old")
+    answer = AQI.ask_question("Enter a ufloat:", "ufloat")
+    print(f"You entered {answer}")
+    AQI.pause()
+    print("tui=False, allow_blank=True")
+    AQI = AskQuestion({}, "", tui=False, allow_blank=True)
     answer = AQI.ask_question("How old are you?", "uint")
     ADD_S = ""
     if isinstance(answer, int) and answer > 1:
