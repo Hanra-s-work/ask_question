@@ -234,3 +234,9 @@ print(f"AskQuestion is written by {AQI.author}")
 ## Running unit tests
 
 Although they might not be bundled in the module itself, you can clone the source repository, intall the requirement at the root and run `pytest -s` at the root of the repository to see the result.
+
+## Note to the devs
+
+Due to the update of the packaging methods (switching from setup.py to pyproject.toml) and for package stability tracking reasons, it is now required (or strongly suggested) you remove the resuting ask_question package that gets installed alongside with it's dependencies.
+
+You can do so with the following command: `pip uninstall ask_question -y`
