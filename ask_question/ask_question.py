@@ -21,13 +21,14 @@ from typing import Union, Dict, List
 class AskQuestion:
     """ An advanced function that contains boiling to gain time when asking a question """
 
-    def __init__(self, human_type: Dict = {}, illegal_characters_nb: str = "", tui: bool = False) -> None:
+    def __init__(self, human_type: Dict = {}, illegal_characters_nb: str = "", tui: bool = False, allow_blank: bool = False) -> None:
         """ The globals for the class """
         self.human_type = human_type
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
         self.in_tui = tui
         self.usr_answer: Union[str, int, float,  None, bool, List] = ""
+        self.allow_blank: bool = allow_blank
         self.answer_was_found = True
         self.answer_was_not_found = False
         self.illegal_characters_found = False
@@ -155,7 +156,7 @@ class AskQuestion:
                 string, char, tolerance, case_sensitive)
         return string
 
-    def _display_accordingly(self, usr_answer: str, message: str, answer_status: bool = True) -> Dict[str, Union[str, int, float, bool, List]]:
+    def _display_accordingly(self, usr_answer: str, message: str, answer_status: bool = True, print_error: bool = True) -> Dict[str, Union[str, int, float, bool, List]]:
         """ Display the message depending on is_tui """
         if self.in_tui is True:
             return {
@@ -164,7 +165,8 @@ class AskQuestion:
                 self._usr_answer_key: usr_answer,
                 self._answer_found_key: answer_status
             }
-        print(message)
+        if print_error is True:
+            print(message)
         return {
             self._tui_key: self.in_tui,
             self._message_key: message,
@@ -347,12 +349,14 @@ class AskQuestion:
             return self.answer_was_found
         return self.answer_was_not_found
 
-    def test_input(self, input_answer: str, answer_type: str) -> Dict[str, Union[str, int, float, bool, List]]:
+    def test_input(self, input_answer: str, answer_type: str, print_error: bool = True) -> Dict[str, Union[str, int, float, bool, List]]:
         """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
         answer_type_cleaned = answer_type\
             .replace("is", "", 1)\
             .replace("is_", "", 1)\
             .replace("is ", "", 1)
+        if (self.is_empty(input_answer) is True or input_answer.isspace()) and self.allow_blank is True:
+            return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
         if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
             self.illegal_characters_found = self.contains_illegal_characters(
                 input_answer,
@@ -360,25 +364,25 @@ class AskQuestion:
             )
             status1 = self._first_chunk(input_answer, answer_type_cleaned)
             if status1 == self.answer_was_found:
-                return self._display_accordingly(input_answer, "", self.answer_was_found)
+                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
             status2 = self._second_chunk(input_answer, answer_type_cleaned)
             if status2 == self.answer_was_found:
-                return self._display_accordingly(input_answer, "", self.answer_was_found)
+                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
             status3 = self._third_chunk(input_answer, answer_type_cleaned)
             if status3 == self.answer_was_found:
-                return self._display_accordingly(input_answer, "", self.answer_was_found)
+                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
             self.usr_answer = ""
             response = "Please enter a response of type '"
             if answer_type_cleaned in self.human_type:
                 response += f"{self.human_type[answer_type_cleaned]}'"
             else:
                 response += "Unknown demanded type"
-            return self._display_accordingly(input_answer, response, self.answer_was_not_found)
+            return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error)
         self.usr_answer = ""
         response = "Response must not be empty or only contain spaces or any non visible character."
-        return self._display_accordingly(input_answer, response, self.answer_was_not_found)
+        return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error)
 
-    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
+    def ask_question(self, question: str, answer_type: str, print_error: bool = False) -> Union[str, int, float, bool]:
         """ Ask a question and continue asking until type met """
         answer_found = False
         usr_answer = ""
@@ -387,7 +391,8 @@ class AskQuestion:
             usr_answer = input(str(question))
             answer_found: Union[bool, Dict] = self.test_input(
                 usr_answer,
-                answer_type
+                answer_type,
+                print_error=print_error
             )
             if isinstance(answer_found, dict):
                 if answer_found[self._answer_found_key] is False:
@@ -403,7 +408,7 @@ class AskQuestion:
 
 
 if __name__ == "__main__":
-    AQI = AskQuestion({}, "", tui=True)
+    AQI = AskQuestion({}, "", tui=True, allow_blank=False)
     answer = AQI.ask_question("How old are you?", "uint")
     ADD_S = ""
     if isinstance(answer, int) and answer > 1:
@@ -411,4 +416,14 @@ if __name__ == "__main__":
     print(f"You are {answer} year{ADD_S} old")
     answer = AQI.ask_question("Enter a ufloat:", "ufloat")
     print(f"You entered {answer}")
+    AQI.pause()
+    print("Allow blank = True")
+    AQI = AskQuestion({}, "", tui=True, allow_blank=True)
+    answer = AQI.ask_question("How old are you?", "uint")
+    ADD_S = ""
+    if isinstance(answer, int) and answer > 1:
+        ADD_S = "s"
+    print(f"You are '{answer}' year{ADD_S} old")
+    answer = AQI.ask_question("Enter a ufloat:", "ufloat")
+    print(f"You entered '{answer}'")
     AQI.pause()

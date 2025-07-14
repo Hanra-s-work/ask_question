@@ -16,9 +16,9 @@ def print_debug(string: str = "") -> None:
         print(f"DEBUG: {string}", file=stderr)
 
 
-def test_is_empty() -> None:
+def test_is_empty_allow_blank_false() -> None:
     """ Test if the input string is empty """
-    aqi = AskQuestion()
+    aqi = AskQuestion(allow_blank=False)
     response = aqi.is_empty("")
     print_debug(f"response = {response}")
     response2 = aqi.is_empty("\t")
@@ -31,6 +31,113 @@ def test_is_empty() -> None:
     assert response2 is False
     assert response3 is False
     assert response4 is False
+
+
+def test_is_empty_allow_blank_true() -> None:
+    """ Test if the input string is empty """
+    aqi = AskQuestion(allow_blank=True)
+    response = aqi.is_empty("")
+    print_debug(f"response = {response}")
+    response2 = aqi.is_empty("\t")
+    print_debug(f"response2 = {response2}")
+    response3 = aqi.is_empty("   ")
+    print_debug(f"response3 = {response3}")
+    response4 = aqi.is_empty("Hello")
+    print_debug(f"response4 = {response4}")
+    assert response is True
+    assert response2 is False
+    assert response3 is False
+    assert response4 is False
+
+
+def test_test_input_allow_blank_false() -> None:
+    """ Test if the input string is empty """
+    aqi = AskQuestion(allow_blank=False)
+    response1 = aqi.test_input("", "str", print_error=False)
+    print_debug(f"response = {response1}")
+    response2 = aqi.test_input("", "str")
+    print_debug(f"response = {response2}")
+    response3 = aqi.test_input("0", "int")
+    print_debug(f"response2 = {response2}")
+    response4 = aqi.test_input("1.0", "float")
+    print_debug(f"response3 = {response3}")
+    response5 = aqi.test_input("1.0.0", "version")
+    print_debug(f"response4 = {response4}")
+    assert response1 == {
+        'answer_found': False,
+        'message': 'Response must not be empty or only contain spaces or any non visible character.',
+        'tui': False,
+        'user_answer': ''
+    }
+    assert response2 == {
+        'answer_found': False,
+        'message': 'Response must not be empty or only contain spaces or any non visible character.',
+        'tui': False,
+        'user_answer': ''
+    }
+    assert response3 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': '0'
+    }
+    assert response4 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': '1.0'
+    }
+    assert response5 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': '1.0.0'
+    }
+
+
+def test_test_input_allow_blank_true() -> None:
+    """ Test if the input string is empty """
+    aqi = AskQuestion(allow_blank=True)
+    response1 = aqi.test_input("", "str", print_error=True)
+    print_debug(f"response = {response1}")
+    response2 = aqi.test_input("", "str", print_error=False)
+    print_debug(f"response = {response2}")
+    response3 = aqi.test_input("0", "int")
+    print_debug(f"response2 = {response3}")
+    response4 = aqi.test_input("1.0", "float")
+    print_debug(f"response3 = {response4}")
+    response5 = aqi.test_input("1.0.0", "version")
+    print_debug(f"response4 = {response5}")
+    assert response1 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': ''
+    }
+    assert response2 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': ''
+    }
+    assert response3 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': '0'
+    }
+    assert response4 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': '1.0'
+    }
+    assert response5 == {
+        'answer_found': True,
+        'message': '',
+        'tui': False,
+        'user_answer': '1.0.0'
+    }
 
 
 def test_is_version() -> None:
