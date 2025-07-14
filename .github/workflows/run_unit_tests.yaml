@@ -22,13 +22,7 @@ on:
 
 env:
   CWD: "."
-  SETUP_FILE: setup.py
-  TOML_SETUP_FILE: pyproject.toml
-  TAG_FILE: version.txt
-  IS_RELEASE: is_release.txt
   MATRIX_VERSION_PUBLISHING: "3.10"
-  MAX_TAG_AGE: "1 hour"
-  SOURCE_CODE_PATH: ask_question/ask_question.py
 
 jobs:
 
@@ -47,30 +41,6 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: ${{ matrix.python-version }}
-
-    - name: Update module version in source code and builder file
-      run: |
-        cd ${{env.CWD}}
-        latest_tag="$(cat ${{env.TAG_FILE}})"
-        if [ -f ${{env.SETUP_FILE}} ]
-        then
-          echo "Updating version in ${{env.SETUP_FILE}}"
-          echo -e "\n\n\n\n\n\n\n\n\n"
-          echo "Tag: $latest_tag"
-          latest_tag=${latest_tag/"v"/""}
-          echo "Tag: $latest_tag"
-          echo "Updating the version in ${{env.SETUP_FILE}}"
-          sed -i "s/version='.*'/version='$latest_tag'/g" ${{env.SETUP_FILE}}
-          sed -i "s/version = '.*'/version = '$latest_tag'/g" ${{env.SETUP_FILE}}
-          echo "Updating the version in ${{env.TOML_SETUP_FILE}}"
-          sed -i "s/version='.*'/version='$latest_tag'/g" ${{env.TOML_SETUP_FILE}}
-          sed -i "s/version = '.*'/version = '$latest_tag'/g" ${{env.TOML_SETUP_FILE}}
-          echo "Updating the version in ${{env.SOURCE_CODE_PATH}}"
-          sed -i "s/self.__version__ = '.*'/self.__version__ = '$latest_tag'/g" ${{env.SOURCE_CODE_PATH}}
-        fi
-        echo "Content: $(ls)"
-        echo "Content of file: $(cat ${{env.SETUP_FILE}})"
-        echo -e "\n\n\n\n\n\n\n\n\n"
 
     - name: Install xvfb
       run: sudo apt-get install xvfb
@@ -96,16 +66,6 @@ jobs:
     - name: building the package
       run: |
         cd ${{env.CWD}}
-        latest_tag="$(cat ${{env.TAG_FILE}})"
-        if [ -f ${{env.SETUP_FILE}} ]
-        then
-          echo "Updating version in ${{env.SETUP_FILE}}"
-          echo -e "\n\n\n\n\n\n\n\n\n"
-          echo "Tag: $latest_tag"
-          latest_tag=${latest_tag/"v"/""}
-          echo "Tag: $latest_tag"
-          sed -i "s/version='.*'/version='$latest_tag'/g" ${{env.SETUP_FILE}}
-        fi
         pip install build
         python -m build
 
