@@ -15,7 +15,7 @@ Crediting the author is appreciated.
 __Author__ = "(c) Henry Letellier"
 
 from string import printable
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Any
 
 
 class AskQuestion:
@@ -382,22 +382,39 @@ class AskQuestion:
         response = "Response must not be empty or only contain spaces or any non visible character."
         return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error)
 
-    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
-        """ Ask a question and continue asking until type met """
+    def ask_question_detailed(self, question: str, answer_type: str) -> Dict[str, Union[str, int, float, bool, List[Any]]]:
+        """_summary_
+            Ask a question and continue asking until suffisant response is met.
+
+        Args:
+            question (str): _description_: The question you wish to display to the user.
+            answer_type (str): _description_: The type of answer expected of the user.
+
+        Returns:
+            Dict[str, Union[str, int, float, bool, List[Any]]]: _description_: A dictionary with the details of the details of the responses.
+        """
         answer_found = False
         usr_answer = ""
         self.usr_answer = ""
         while answer_found != self.answer_was_found:
             usr_answer = input(str(question))
-            answer_found: Union[bool, Dict] = self.test_input(
+            provided_answer: Dict = self.test_input(
                 usr_answer,
                 answer_type,
                 print_error=False
             )
-            if isinstance(answer_found, dict):
-                if answer_found[self._answer_found_key] is False:
-                    print(answer_found[self._message_key])
-                answer_found = answer_found[self._answer_found_key]
+            if self._answer_found_key in provided_answer:
+                answer_found = provided_answer[self._answer_found_key]
+                if answer_found is False:
+                    print(provided_answer[self._message_key])
+            if self._usr_answer_key in provided_answer:
+                self.usr_answer = provided_answer[self._usr_answer_key]
+        return provided_answer
+
+    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
+        """ Ask a question and continue asking until type met """
+        self.usr_answer = ""
+        self.ask_question_detailed(question, answer_type)
         return self.usr_answer
 
     def pause(self, pause_message: str = "Press enter to continue...") -> None:
@@ -410,6 +427,7 @@ class AskQuestion:
 if __name__ == "__main__":
     print("tui=True, allow_blank=False")
     AQI = AskQuestion({}, "", tui=True, allow_blank=False)
+    answer = AQI.ask_question("How old are you?", "uint")
     answer = AQI.ask_question("How old are you?", "uint")
     ADD_S = ""
     if isinstance(answer, int) and answer > 1:
