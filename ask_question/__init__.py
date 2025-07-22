@@ -3,6 +3,7 @@ File in charge of automating and simplify the process of asking a question and e
 """
 
 from .ask_question import AskQuestion
+from .ask_question_response_paquet import AQFlexibleDictionary, AskQuestionResponse
 TUI_AVAILABLE = True
 
 
@@ -12,6 +13,7 @@ except ImportError:
     TUI_AVAILABLE = False
 
 __all__ = [
+    "AQFlexibleDictionary", "AskQuestionResponse",
     "ask_question", "askquestion", "Ask_Question", "ASK_QUESTION", "ASKQUESTION"
 ]
 
