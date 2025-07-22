@@ -17,6 +17,16 @@ __Author__ = "(c) Henry Letellier"
 from string import printable
 from typing import Union, Dict, List, Any
 
+try:
+    from .ask_question_response_paquet import AskQuestionResponse
+except ImportError:
+    try:
+        from ask_question_response_paquet import AskQuestionResponse
+    except ImportError as exc:
+        raise ImportError(
+            "Class AskQuestionResponse not found in the module, make sure the path is valid or that your module is not corrupt"
+        ) from exc
+
 
 class AskQuestion:
     """ An advanced function that contains boiling to gain time when asking a question """
@@ -27,7 +37,7 @@ class AskQuestion:
         self.illegal_characters_nb = illegal_characters_nb
         self.author = "(c) Henry Letellier"
         self.in_tui = tui
-        self.usr_answer: Union[str, int, float,  None, bool, List] = ""
+        self.usr_answer: Union[str, int, float,  None, bool, List[Any]] = ""
         self.allow_blank: bool = allow_blank
         self.answer_was_found = True
         self.answer_was_not_found = False
@@ -35,6 +45,7 @@ class AskQuestion:
         self._tui_key = "tui"
         self._message_key = "message"
         self._usr_answer_key = "user_answer"
+        self._raw_usr_answer_key = "raw_user_answer"
         self._answer_found_key = "answer_found"
         self.check_load()
 
@@ -156,23 +167,20 @@ class AskQuestion:
                 string, char, tolerance, case_sensitive)
         return string
 
-    def _display_accordingly(self, usr_answer: str, message: str, answer_status: bool = True, print_error: bool = True) -> Dict[str, Union[str, int, float, bool, List]]:
+    def _display_accordingly(self, raw_usr_answer: str, message: str, answer_status: bool = True, print_error: bool = True, answer_type: str = "", question: Union[str, None] = None) -> AskQuestionResponse:
         """ Display the message depending on is_tui """
-        if self.in_tui is True:
-            return {
-                self._tui_key: self.in_tui,
-                self._message_key: message,
-                self._usr_answer_key: usr_answer,
-                self._answer_found_key: answer_status
-            }
-        if print_error is True:
+        final = AskQuestionResponse()
+        final.tui = self.in_tui
+        final.allow_blanks = self.allow_blank
+        final.message = message
+        final.raw_user_answer = raw_usr_answer
+        final.user_answer = self.usr_answer
+        final.answer_found = answer_status
+        final.question = question
+        final.answer_type = answer_type
+        if self.in_tui is False and print_error is True:
             print(message)
-        return {
-            self._tui_key: self.in_tui,
-            self._message_key: message,
-            self._usr_answer_key: usr_answer,
-            self._answer_found_key: answer_status
-        }
+        return final
 
     def _process_isint(self, input_answer: str, answer_type: str) -> bool:
         """ Process the uint data """
@@ -214,6 +222,7 @@ class AskQuestion:
 
     def _process_isuint(self, input_answer: str, answer_type: str) -> bool:
         """ Process the uint data """
+        # We don't need to check the '-' sign because isdigit does not consider '-' as a number
         if input_answer.isdigit() is True and ("isuint" in answer_type or "uint" in answer_type):
             self.usr_answer = int(input_answer)
             return self.answer_was_found
@@ -269,6 +278,7 @@ class AskQuestion:
             for i in input_answer:
                 if i not in printable:
                     return self.answer_was_not_found
+            self.usr_answer = input_answer
             return self.answer_was_found
         return self.answer_was_not_found
 
@@ -349,14 +359,14 @@ class AskQuestion:
             return self.answer_was_found
         return self.answer_was_not_found
 
-    def test_input(self, input_answer: str, answer_type: str, print_error: bool = True) -> Dict[str, Union[str, int, float, bool, List]]:
+    def test_input(self, input_answer: str, answer_type: str, print_error: bool = True) -> AskQuestionResponse:
         """ The function in charge of ensuring that the user's response corresponds to the programmer's expectations """
         answer_type_cleaned = answer_type\
             .replace("is", "", 1)\
             .replace("is_", "", 1)\
             .replace("is ", "", 1)
         if (self.is_empty(input_answer) is True or input_answer.isspace()) and self.allow_blank is True:
-            return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
+            return self._display_accordingly(input_answer, "", self.answer_was_found, print_error, answer_type)
         if self.is_empty(input_answer) is False and input_answer.isspace() is False and input_answer.isprintable() is True:
             self.illegal_characters_found = self.contains_illegal_characters(
                 input_answer,
@@ -364,25 +374,25 @@ class AskQuestion:
             )
             status1 = self._first_chunk(input_answer, answer_type_cleaned)
             if status1 == self.answer_was_found:
-                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
+                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error, answer_type)
             status2 = self._second_chunk(input_answer, answer_type_cleaned)
             if status2 == self.answer_was_found:
-                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
+                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error, answer_type)
             status3 = self._third_chunk(input_answer, answer_type_cleaned)
             if status3 == self.answer_was_found:
-                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error)
+                return self._display_accordingly(input_answer, "", self.answer_was_found, print_error, answer_type)
             self.usr_answer = ""
             response = "Please enter a response of type '"
             if answer_type_cleaned in self.human_type:
                 response += f"{self.human_type[answer_type_cleaned]}'"
             else:
                 response += "Unknown demanded type"
-            return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error)
+            return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error, answer_type)
         self.usr_answer = ""
         response = "Response must not be empty or only contain spaces or any non visible character."
-        return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error)
+        return self._display_accordingly(input_answer, response, self.answer_was_not_found, print_error, answer_type)
 
-    def ask_question_detailed(self, question: str, answer_type: str) -> Dict[str, Union[str, int, float, bool, List[Any]]]:
+    def ask_question_detailed(self, question: str, answer_type: str) -> AskQuestionResponse:
         """_summary_
             Ask a question and continue asking until suffisant response is met.
 
@@ -398,11 +408,12 @@ class AskQuestion:
         self.usr_answer = ""
         while answer_found != self.answer_was_found:
             usr_answer = input(str(question))
-            provided_answer: Dict = self.test_input(
+            provided_answer: AskQuestionResponse = self.test_input(
                 usr_answer,
                 answer_type,
                 print_error=False
             )
+            provided_answer.question = str(question)
             if self._answer_found_key in provided_answer:
                 answer_found = provided_answer[self._answer_found_key]
                 if answer_found is False:
@@ -411,11 +422,12 @@ class AskQuestion:
                 self.usr_answer = provided_answer[self._usr_answer_key]
         return provided_answer
 
-    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float, bool]:
+    def ask_question(self, question: str, answer_type: str) -> Union[str, int, float,  None, bool, List[Any]]:
         """ Ask a question and continue asking until type met """
-        self.usr_answer = ""
-        self.ask_question_detailed(question, answer_type)
-        return self.usr_answer
+        response: AskQuestionResponse = self.ask_question_detailed(
+            question, answer_type
+        )
+        return response.user_answer
 
     def pause(self, pause_message: str = "Press enter to continue...") -> None:
         """ Act like the windows batch pause function """
